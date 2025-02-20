@@ -11,7 +11,8 @@ class AddToCart {
 
     addingToCart(){
 
-        cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+        //cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+        cy.get('[data-test="add-to-cart"]').click();
     }
     cartPage(){
         cy.screenshot().get('.shopping_cart_link').click();

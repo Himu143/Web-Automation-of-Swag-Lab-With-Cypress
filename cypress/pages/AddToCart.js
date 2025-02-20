@@ -29,7 +29,7 @@ class AddToCart {
     }
     completePurchase(){
         cy.get('[data-test="finish"]').click();
-        cy.get('.title').should("have.text","Checkout: Complete!")
+        cy.get('.title').should("have.text","Checkout: Complete!xcb,jghfgfsdas")
     }
     cancelPurchase(){
         cy.get('[data-test="cancel"]').click()

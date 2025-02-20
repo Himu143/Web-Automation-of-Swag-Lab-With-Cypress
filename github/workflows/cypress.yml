@@ -1,45 +1,23 @@
-name: Cypress Tests
+name: Cypress Tests 
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: push
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Fixed unsupported Ubuntu version
+    container:
+      image: cypress/browsers:22.12.0
+      options: --user 1001
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+      - name: Install Dependencies
+        run: npm install  # Ensures Cypress and dependencies are installed
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run Cypress tests
+      - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          browser: chrome  # Use "electron" for default
-          headless: true
-
-      - name: Upload Cypress Screenshots (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-
-      - name: Upload Cypress Videos (on failure)
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-videos
-          path: cypress/videos
+          browser: chrome
+          headless: true  # Runs tests without opening UI

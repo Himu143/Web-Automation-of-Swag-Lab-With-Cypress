@@ -25,14 +25,14 @@ class AddToCart {
         cy.get('[data-test="firstName"]').type(firstName);
         cy.get('[data-test="lastName"]').type(lastName);
         cy.get('[data-test="postalCode"]').type(zip);
-        cy.get('[data-test="continue"]').click();
+        cy.get('[data-test="co"]').click();
     }
     completePurchase(){
         cy.get('[data-test="finish"]').click();
         cy.get('.title').should("have.text","Checkout: Complete!")
     }
     cancelPurchase(){
-        cy.get('[data-test="cancel"]').click()
+        cy.get('[data-test="cancel"]').click();
     }
 
 }

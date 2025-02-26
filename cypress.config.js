@@ -10,7 +10,8 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       require('cypress-mochawesome-reporter/plugin')(on);
       config.specPattern = [
-        'cypress/e2e/LoginTest.cy.js'
+        'cypress/e2e/LoginTest.cy.js',
+        'cypress/e2e/AddToCartTest.cy.js'
       ]
       return config;
     },

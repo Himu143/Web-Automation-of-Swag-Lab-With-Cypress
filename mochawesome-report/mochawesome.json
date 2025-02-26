@@ -1,0 +1,119 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-02-26T13:03:09.462Z",
+    "end": "2025-02-26T13:03:16.821Z",
+    "duration": 7359,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "75c79935-0a99-4c96-be25-6fd436f64389",
+      "title": "",
+      "fullFile": "cypress/e2e/AddToCartTest.cy.js",
+      "file": "cypress/e2e/AddToCartTest.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "e7437e56-9bae-47f0-9270-2aec539eb6c9",
+          "title": "Adding product to the cart",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Purchase is not successful",
+              "fullTitle": "Adding product to the cart Purchase is not successful",
+              "timedOut": null,
+              "duration": 3198,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": "{\n  \"title\": \"cypress-mochawesome-reporter-screenshots\",\n  \"value\": [\n    [\n      \"/AddToCartTest.cy.js/Adding product to the cart -- Purchase is not successful.png\"\n    ]\n  ]\n}",
+              "code": "addToCart.userInDashBoard();\naddToCart.viewProduct();\naddToCart.addingToCart();\naddToCart.cartPage();\naddToCart.checkOutPage();\naddToCart.userInformation(\"Kazi Tajul\", \"Islam\", \"1204\");\naddToCart.cancelPurchase();\naddToCart.userInDashBoard();",
+              "err": {},
+              "uuid": "b53cf41f-b99a-4f2c-ae58-70cd34de13fa",
+              "parentUUID": "e7437e56-9bae-47f0-9270-2aec539eb6c9",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Purchase is successful",
+              "fullTitle": "Adding product to the cart Purchase is successful",
+              "timedOut": null,
+              "duration": 2744,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": "{\n  \"title\": \"cypress-mochawesome-reporter-screenshots\",\n  \"value\": [\n    [\n      \"/AddToCartTest.cy.js/Adding product to the cart -- Purchase is successful.png\"\n    ]\n  ]\n}",
+              "code": "addToCart.userInDashBoard();\naddToCart.viewProduct();\naddToCart.addingToCart();\naddToCart.cartPage();\naddToCart.checkOutPage();\naddToCart.userInformation(\"Kazi Tajul\", \"Islam\", \"1209\");\naddToCart.completePurchase();",
+              "err": {},
+              "uuid": "5b52c674-9687-41dd-a74a-774812a9fe7b",
+              "parentUUID": "e7437e56-9bae-47f0-9270-2aec539eb6c9",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "b53cf41f-b99a-4f2c-ae58-70cd34de13fa",
+            "5b52c674-9687-41dd-a74a-774812a9fe7b"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 5942,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": null,
+      "version": "6.2.0"
+    }
+  }
+}

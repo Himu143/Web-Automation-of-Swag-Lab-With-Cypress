@@ -1,13 +1,13 @@
 pipeline {
     agent {
         docker {
-            image 'cypress/included:latest'  // Use Cypress pre-installed Docker image
+            image 'node:latest'  // Use Node.js as the base image
             args '-u root'  // Run as root for permissions
         }
     }
     environment {
         CI = 'true'
-        DISPLAY = ':99.0'  // Required for GUI-based Cypress execution
+        DISPLAY = ':99.0'  // Required for Cypress headless execution
     }
     stages {
         stage('Checkout Code') {
@@ -19,6 +19,7 @@ pipeline {
             steps {
                 script {
                     sh 'npm install'  // Install dependencies from package.json
+                    sh 'npx cypress install'  // Ensure Cypress binary is downloaded
                     sh 'npx cypress verify'  // Verify Cypress installation
                 }
             }
@@ -27,7 +28,7 @@ pipeline {
             steps {
                 script {
                     sh 'Xvfb :99 -ac & sleep 3'  // Start a virtual display for Cypress
-                    sh 'npx cypress run --browser electron || echo "Cypress test run failed!"'  // Run tests in Electron browser
+                    sh 'npx cypress run --browser electron || echo "Cypress test run failed!"'  // Run Cypress in Electron
                 }
             }
         }
@@ -45,6 +46,7 @@ pipeline {
         }
     }
 }
+
 
 
 

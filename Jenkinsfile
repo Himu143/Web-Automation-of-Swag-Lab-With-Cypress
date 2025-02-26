@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'cypress/included:latest' // Uses a Cypress Docker image with Node.js installed
+            image 'node:latest'  // Uses a Node.js Docker image instead of Cypress image
         }
     }
     environment {
@@ -15,28 +15,71 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install'  // Install dependencies with npm
             }
         }
-        stage('Run Cypress Tests') {
+        stage('Run Tests') {
             steps {
-                sh 'npx cypress run'
+                sh 'npm test'  // Run the tests using npm (you can replace this with your specific test command)
             }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true
-            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true
+            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // You might need to adjust this if you're not using Cypress-specific folders
+            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Same as above
         }
         failure {
-            echo 'Cypress tests failed. Check the logs for details.'
+            echo 'Tests failed. Check the logs for details.'
         }
         success {
-            echo 'Cypress tests passed successfully!'
+            echo 'Tests passed successfully!'
         }
     }
 }
+
+
+
+
+// pipeline {
+//     agent {
+//         docker {
+//             image 'cypress/included:latest' // Uses a Cypress Docker image with Node.js installed
+//         }
+//     }
+//     environment {
+//         CI = 'true'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+//             }
+//         }
+//         stage('Install Dependencies') {
+//             steps {
+//                 sh 'npm install'
+//             }
+//         }
+//         stage('Run Cypress Tests') {
+//             steps {
+//                 sh 'npx cypress run'
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true
+//             archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true
+//         }
+//         failure {
+//             echo 'Cypress tests failed. Check the logs for details.'
+//         }
+//         success {
+//             echo 'Cypress tests passed successfully!'
+//         }
+//     }
+// }
 
 
 

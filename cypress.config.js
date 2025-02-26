@@ -4,6 +4,8 @@ module.exports = defineConfig({
   chromeWebSecurity: false,
   reporter:'cypress-mochawesome-reporter',
   e2e: {
+    video: false,  // Ensures Cypress records videos
+    screenshotOnRunFailure: true,
     watchForFileChanges: false,
     setupNodeEvents(on, config) {
       require('cypress-mochawesome-reporter/plugin')(on);

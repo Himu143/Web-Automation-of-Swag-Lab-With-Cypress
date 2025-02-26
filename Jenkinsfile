@@ -1,48 +1,42 @@
 pipeline {
-    agent any
-
-    environment {
-        NODE_VERSION = '20'  // Ensure Node.js 20 is used
+    agent {
+        docker {
+            image 'cypress/included:latest' // Uses a Cypress Docker image with Node.js installed
+        }
     }
-
+    environment {
+        CI = 'true'
+    }
     stages {
-        stage('Setup Node.js') {
+        stage('Checkout Code') {
             steps {
-                script {
-                    def nodeVersion = sh(script: 'node -v', returnStdout: true).trim()
-                    if (!nodeVersion.contains(NODE_VERSION)) {
-                        error "Node.js version mismatch! Expected: ${NODE_VERSION}, Found: ${nodeVersion}"
-                    }
-                }
+                git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
             }
         }
-
         stage('Install Dependencies') {
             steps {
-                sh 'npm i'
+                sh 'npm install'
             }
         }
-
         stage('Run Cypress Tests') {
             steps {
                 sh 'npx cypress run'
             }
         }
     }
-
     post {
         always {
-            archiveArtifacts artifacts: 'cypress/screenshots/**/*, cypress/videos/**/*', allowEmptyArchive: true
-        }
-        success {
-            echo 'Cypress tests passed successfully!'
+            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true
+            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true
         }
         failure {
             echo 'Cypress tests failed. Check the logs for details.'
         }
+        success {
+            echo 'Cypress tests passed successfully!'
+        }
     }
 }
-
 
 
 

@@ -1,3 +1,44 @@
+pipeline {
+    agent {
+        docker {
+            image 'cypress/included:12.17.4' // Use Cypress official Docker image
+        }
+    }
+    environment {
+        CI = 'true'
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+                sh 'npx cypress install' // Ensure Cypress binary is installed
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'npx cypress run' // Run the Cypress tests
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true
+            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true
+        }
+        failure {
+            echo 'Tests failed. Check the logs for details.'
+        }
+        success {
+            echo 'Tests passed successfully!'
+        }
+    }
+}
+
 // pipeline {
 //     agent {
 //         docker {
@@ -107,45 +148,45 @@
 
 
 
-pipeline {
-    agent {
-        docker {
-            image 'node:latest'  // Uses a Node.js Docker image instead of Cypress image
-        }
-    }
-    environment {
-        CI = 'true'
-    }
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'  // Install dependencies with npm
-            }
-        }
-        stage('Run Tests') {
-            steps {
-                sh 'npx cypress run'  // Run the tests using npm (you can replace this with your specific test command)
-            }
-        }
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // You might need to adjust this if you're not using Cypress-specific folders
-            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Same as above
-        }
-        failure {
-            echo 'Tests failed. Check the logs for details.'
-        }
-        success {
-            echo 'Tests passed successfully!'
-        }
-    }
-}
+// pipeline {
+//     agent {
+//         docker {
+//             image 'node:latest'  // Uses a Node.js Docker image instead of Cypress image
+//         }
+//     }
+//     environment {
+//         CI = 'true'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+//             }
+//         }
+//         stage('Install Dependencies') {
+//             steps {
+//                 sh 'npm install'  // Install dependencies with npm
+//             }
+//         }
+//         stage('Run Tests') {
+//             steps {
+//                 sh 'npx cypress run'  // Run the tests using npm (you can replace this with your specific test command)
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // You might need to adjust this if you're not using Cypress-specific folders
+//             archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Same as above
+//         }
+//         failure {
+//             echo 'Tests failed. Check the logs for details.'
+//         }
+//         success {
+//             echo 'Tests passed successfully!'
+//         }
+//     }
+// }
 
 
 

@@ -1,51 +1,3 @@
-pipeline {
-    agent any
-    environment {
-        CI = 'true'
-    }
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
-            }
-        }
-        stage('Install Dependencies') {
-            agent {
-                docker {
-                    image 'node:latest' // Use Node.js for installation
-                }
-            }
-            steps {
-                sh 'npm install'
-            }
-        }
-        stage('Run Tests') {
-            agent {
-                docker {
-                    image 'cypress/included:12.17.4' // Run tests in Cypress container
-                }
-            }
-            steps {
-                sh 'npx cypress run --video=false --reporter=json'
-            }
-        }
-    }
-    post {
-        always {
-            script {
-                echo 'Skipping video, screenshot, and report processing as they are disabled.'
-            }
-        }
-        failure {
-            echo 'Tests failed. Check the logs for details.'
-        }
-        success {
-            echo 'Tests passed successfully!'
-        }
-    }
-}
-
-// it works
 // pipeline {
 //     agent any
 //     environment {
@@ -74,11 +26,16 @@ pipeline {
 //                 }
 //             }
 //             steps {
-//                 sh 'npx cypress run'
+//                 sh 'npx cypress run --video=false --reporter=json'
 //             }
 //         }
 //     }
 //     post {
+//         always {
+//             script {
+//                 echo 'Skipping video, screenshot, and report processing as they are disabled.'
+//             }
+//         }
 //         failure {
 //             echo 'Tests failed. Check the logs for details.'
 //         }
@@ -87,6 +44,49 @@ pipeline {
 //         }
 //     }
 // }
+
+// it works
+pipeline {
+    agent any
+    environment {
+        CI = 'true'
+    }
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+            }
+        }
+        stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'node:latest' // Use Node.js for installation
+                }
+            }
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Run Tests') {
+            agent {
+                docker {
+                    image 'cypress/included:12.17.4' // Run tests in Cypress container
+                }
+            }
+            steps {
+                sh 'npx cypress run'
+            }
+        }
+    }
+    post {
+        failure {
+            echo 'Tests failed. Check the logs for details.'
+        }
+        success {
+            echo 'Tests passed successfully!'
+        }
+    }
+}
 
 // pipeline {
 

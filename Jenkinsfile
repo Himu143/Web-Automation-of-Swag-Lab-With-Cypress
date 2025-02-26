@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'cypress/included:12.17.4' // Use Cypress official Docker image
+            image 'node:latest'
         }
     }
     environment {
@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'npx cypress run' // Run the Cypress tests
+                sh 'npx cypress run' // Run tests
             }
         }
     }
@@ -38,6 +38,7 @@ pipeline {
         }
     }
 }
+
 
 // pipeline {
 //     agent {

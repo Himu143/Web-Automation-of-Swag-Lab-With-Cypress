@@ -24,18 +24,6 @@ pipeline {
                 }
             }
         }
-        stage('Ensure Test Script') {
-            steps {
-                script {
-                    // Ensure the "test" script is added to package.json
-                    sh '''
-                    if ! jq -e .scripts.test package.json > /dev/null; then
-                        jq '.scripts.test="npx cypress run"' package.json > temp.json && mv temp.json package.json
-                    fi
-                    '''
-                }
-            }
-        }
         stage('Run Cypress Tests') {
             steps {
                 sh 'npx cypress run'  // Run Cypress tests using npx
@@ -55,6 +43,7 @@ pipeline {
         }
     }
 }
+
 
 
 // pipeline {

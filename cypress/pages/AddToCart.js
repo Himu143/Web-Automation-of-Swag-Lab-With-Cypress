@@ -25,7 +25,7 @@ class AddToCart {
         cy.get('[data-test="firstName"]').type(firstName);
         cy.get('[data-test="lastName"]').type(lastName);
         cy.get('[data-test="postalCode"]').type(zip);
-        cy.get('[data-test="co"]').click();
+        cy.get('[data-test="continue"]').click();
     }
     completePurchase(){
         cy.get('[data-test="finish"]').click();

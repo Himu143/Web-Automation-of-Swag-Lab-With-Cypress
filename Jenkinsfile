@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:latest'
-        }
-    }
+    agent any
     environment {
         CI = 'true'
     }
@@ -14,14 +10,23 @@ pipeline {
             }
         }
         stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'node:latest' // Use Node.js for installation
+                }
+            }
             steps {
                 sh 'npm install'
-                sh 'npx cypress install' // Ensure Cypress binary is installed
             }
         }
         stage('Run Tests') {
+            agent {
+                docker {
+                    image 'cypress/included:12.17.4' // Use Cypress image for tests
+                }
+            }
             steps {
-                sh 'npx cypress run' // Run tests
+                sh 'npx cypress run'
             }
         }
     }
@@ -38,6 +43,7 @@ pipeline {
         }
     }
 }
+
 
 
 // pipeline {

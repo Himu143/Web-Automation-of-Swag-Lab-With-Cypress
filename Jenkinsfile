@@ -22,7 +22,7 @@ pipeline {
         stage('Run Tests') {
             agent {
                 docker {
-                    image 'cypress/included:12.17.4' // Use Cypress image for tests
+                    image 'cypress/included:12.17.4' // Run tests in Cypress container
                 }
             }
             steps {
@@ -31,10 +31,6 @@ pipeline {
         }
     }
     post {
-        always {
-            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true
-            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true
-        }
         failure {
             echo 'Tests failed. Check the logs for details.'
         }
@@ -43,6 +39,53 @@ pipeline {
         }
     }
 }
+
+// pipeline {
+
+//     agent any
+//     environment {
+//         CI = 'true'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+//             }
+//         }
+//         stage('Install Dependencies') {
+//             agent {
+//                 docker {
+//                     image 'node:latest' // Use Node.js for installation
+//                 }
+//             }
+//             steps {
+//                 sh 'npm install'
+//             }
+//         }
+//         stage('Run Tests') {
+//             agent {
+//                 docker {
+//                     image 'cypress/included:12.17.4' // Use Cypress image for tests
+//                 }
+//             }
+//             steps {
+//                 sh 'npx cypress run'
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true
+//             archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true
+//         }
+//         failure {
+//             echo 'Tests failed. Check the logs for details.'
+//         }
+//         success {
+//             echo 'Tests passed successfully!'
+//         }
+//     }
+// }
 
 
 

@@ -1,7 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'node:latest'  // Uses a Node.js Docker image instead of Cypress image
+            image 'node:latest'  // Uses a Node.js Docker image
+            args '-u root'  // Ensure that Docker runs with the proper user
         }
     }
     environment {
@@ -15,19 +16,32 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'  // Install dependencies with npm
+                script {
+                    // Ensure that deprecated packages are updated
+                    sh 'npm install glob@latest'
+                    sh 'npm install lru-cache'
+                    sh 'npm install'  // Install dependencies from package.json
+                }
             }
         }
         stage('Run Tests') {
             steps {
-                sh 'npm test'  // Run the tests using npm (you can replace this with your specific test command)
+                script {
+                    // Ensure the test script is defined in package.json
+                    sh '''
+                        if ! grep -q '"test": "cypress run"' package.json; then
+                            echo '{"scripts": {"test": "cypress run"}}' > package.json
+                        fi
+                        npm test  // Run tests (Cypress in this case)
+                    '''
+                }
             }
         }
     }
     post {
         always {
-            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // You might need to adjust this if you're not using Cypress-specific folders
-            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Same as above
+            archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // Adjust if using a different test framework
+            archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Adjust if using a different test framework
         }
         failure {
             echo 'Tests failed. Check the logs for details.'
@@ -37,6 +51,48 @@ pipeline {
         }
     }
 }
+
+
+
+// pipeline {
+//     agent {
+//         docker {
+//             image 'node:latest'  // Uses a Node.js Docker image instead of Cypress image
+//         }
+//     }
+//     environment {
+//         CI = 'true'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+//             }
+//         }
+//         stage('Install Dependencies') {
+//             steps {
+//                 sh 'npm install'  // Install dependencies with npm
+//             }
+//         }
+//         stage('Run Tests') {
+//             steps {
+//                 sh 'npm test'  // Run the tests using npm (you can replace this with your specific test command)
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // You might need to adjust this if you're not using Cypress-specific folders
+//             archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Same as above
+//         }
+//         failure {
+//             echo 'Tests failed. Check the logs for details.'
+//         }
+//         success {
+//             echo 'Tests passed successfully!'
+//         }
+//     }
+// }
 
 
 

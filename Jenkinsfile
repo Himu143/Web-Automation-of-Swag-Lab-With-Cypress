@@ -24,17 +24,21 @@ pipeline {
                 }
             }
         }
-        stage('Run Tests') {
+        stage('Ensure Test Script') {
             steps {
                 script {
-                    // Ensure the test script is defined in package.json
+                    // Ensure the "test" script is added to package.json
                     sh '''
-                        if ! grep -q '"test": "cypress run"' package.json; then
-                            echo '{"scripts": {"test": "cypress run"}}' > package.json
-                        fi
-                        npm test  // Run tests (Cypress in this case)
+                    if ! jq -e .scripts.test package.json > /dev/null; then
+                        jq '.scripts.test="npx cypress run"' package.json > temp.json && mv temp.json package.json
+                    fi
                     '''
                 }
+            }
+        }
+        stage('Run Cypress Tests') {
+            steps {
+                sh 'npx cypress run'  // Run Cypress tests using npx
             }
         }
     }
@@ -44,13 +48,68 @@ pipeline {
             archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Adjust if using a different test framework
         }
         failure {
-            echo 'Tests failed. Check the logs for details.'
+            echo 'Cypress tests failed. Check the logs for details.'
         }
         success {
-            echo 'Tests passed successfully!'
+            echo 'Cypress tests passed successfully!'
         }
     }
 }
+
+
+// pipeline {
+//     agent {
+//         docker {
+//             image 'node:latest'  // Uses a Node.js Docker image
+//             args '-u root'  // Ensure that Docker runs with the proper user
+//         }
+//     }
+//     environment {
+//         CI = 'true'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git url: 'https://github.com/Himu143/Web-Automation-of-Swag-Lab-With-Cypress', branch: 'main'
+//             }
+//         }
+//         stage('Install Dependencies') {
+//             steps {
+//                 script {
+//                     // Ensure that deprecated packages are updated
+//                     sh 'npm install glob@latest'
+//                     sh 'npm install lru-cache'
+//                     sh 'npm install'  // Install dependencies from package.json
+//                 }
+//             }
+//         }
+//         stage('Run Tests') {
+//             steps {
+//                 script {
+//                     // Ensure the test script is defined in package.json
+//                     sh '''
+//                         if ! grep -q '"test": "cypress run"' package.json; then
+//                             echo '{"scripts": {"test": "cypress run"}}' > package.json
+//                         fi
+//                         npm test  // Run tests (Cypress in this case)
+//                     '''
+//                 }
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             archiveArtifacts artifacts: 'cypress/screenshots/**', fingerprint: true  // Adjust if using a different test framework
+//             archiveArtifacts artifacts: 'cypress/videos/**', fingerprint: true  // Adjust if using a different test framework
+//         }
+//         failure {
+//             echo 'Tests failed. Check the logs for details.'
+//         }
+//         success {
+//             echo 'Tests passed successfully!'
+//         }
+//     }
+// }
 
 
 
